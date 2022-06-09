@@ -1,9 +1,45 @@
 #1 -  Написать программу вычисления арифметического выражения заданного строкой. Используются операции +,-,/,*. приоритет операций стандартный. Функцию eval не использовать!
-#Пример: 2+2 => 4; 1+2*3 => 7; 1-2*3 => -5;
+#Пример: 2+2 => 4;  => 7; 1-2*3 => -5;
 #Дополнительно: Добавить возможность использования скобок, меняющих приоритет операций. 
 #Пример: 1+2*3 => 7; (1+2)*3 => 9;
 
-
+n = ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
+exp = '5^1+2*3-11/2^2'
+arr = [i for i in exp]
+nums = []
+s = ''
+for i in arr:
+    if i in n:
+        s += i
+    else:
+        nums.append(s)
+        nums.append(i)
+        s = ''
+nums.append(s)
+i = 0
+a = True
+count = nums.count('^')
+print(nums)
+g = 0
+while g < count:
+    abs = nums.index("^")
+    nums[abs] = int(nums[abs-1]) ** int(nums[abs+1])
+    del nums[abs+1]
+    del nums[abs-1]
+    g += 1
+while i < len(nums):
+    if nums[i] == '*':
+        nums[i] = int(nums[i-1]) * int(nums[i+1])
+        del nums[i+1]
+        del nums[i-1]
+        i -= 1
+    elif nums[i] == '/':
+        nums[i] = int(nums[i-1]) / int(nums[i+1])
+        del nums[i+1]
+        del nums[i-1]
+        i -= 1
+    i += 1
+print(nums)
 
 
 #2 - Реализовать RLE алгоритм. реализовать модуль сжатия и восстановления данных. 

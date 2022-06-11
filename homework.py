@@ -75,33 +75,39 @@ def get_key(i, sl):
         if j == i:
             return k
 
-with open('text_do.txt','r', encoding='utf8') as fdo, open('text_posle.txt', 'w') as fpo:
-    file_do = str(fdo.readlines())
-    file_do = file_do.replace('[', '')
-    file_do = file_do.replace(']', '')
-    file_do = file_do.replace("'", '')
-    file_format = list(file_do.split())
-    ff = slovar(file_format)
-    for i in file_format:
-        key = get_key(i, ff)
-        if ff[key] == '\\n,':
-            fpo.write('\n')
-        else:
-            fpo.write(f'{key}' + ' ')
-     
-with open('text_posle.txt', 'r') as tp, open('text_po.txt', 'w', encoding='utf8') as tpo:
-    file_do = str(tp.readlines())
-    file_do = file_do.replace('[', '')
-    file_do = file_do.replace(']', '')
-    file_do = file_do.replace("'", '')
-    file_format = list(file_do.split())
-    print(file_format)
-    for i in file_format:
-        if i == '\\n,':
-            tpo.write('\n')
-        else:
-            key = int(i)
-            tpo.write(f'{ff[key]} ')
+def create_array(text):
+    stroka = str(text.readlines()).replace('[', '').replace(']', '').replace("'", '')
+    array = list(stroka.split())
+    return array
+
+def convert_file_min(gk, sl, ca):
+    with open('text_do.txt','r', encoding='utf8') as fdo, open('text_posle.txt', 'w') as fpo:
+        file_format = ca(fdo)
+        ff = sl(file_format)
+        for i in file_format:
+            key = gk(i, ff)
+            if ff[key] == '\\n,':
+                fpo.write('\n')
+            else:
+                fpo.write(f'{key}' + ' ')
+
+def convert_file_max(ca, sl):
+    with open('text_posle.txt', 'r+', encoding='utf8') as tp, open('text_do.txt','r', encoding='utf8') as td:
+        ff = sl(create_array(td))
+        file_format = create_array(tp)
+    with open('text_posle.txt', 'w+', encoding='utf8') as tp:
+        for i in file_format:
+            if i == '\\n,':
+                tp.write('\n')
+            else:
+                key = int(i)
+                tp.write(f'{ff[key]} ')
+
+user = input('Вы хотите сжать файл или восстановить?: ')
+if user.lower() == 'сжать':
+    convert_file_min(get_key, slovar, create_array)
+elif user.lower() == 'восстановить':
+    convert_file_max(create_array, slovar)
 
 #3 -  ROT13 - это простой шифр подстановки букв, который заменяет букву буквой, которая идет через 13 букв после нее в алфавите. ROT13 является примером шифра Цезаря.
 #Создайте функцию, которая принимает строку и возвращает строку, зашифрованную с помощью Rot13 . 

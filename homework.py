@@ -61,13 +61,48 @@ znach(array)'''
 #2 - Реализовать RLE алгоритм. реализовать модуль сжатия и восстановления данных. 
 # Входные и выходные данные хранятся в отдельных файлах (в одном файлике отрывок из какой-то книги, а втором файлике — сжатая версия этого текста). 
 
-with open('text_do.txt', 'r+', encoding='utf8') as fdo:
+def slovar(stroka):
+    sl = {}
+    g = 0
+    for i in stroka:
+        if i not in sl.values():
+            sl[g] = i
+            g += 1
+    return sl
+        
+def get_key(i, sl):
+    for k, j in sl.items():
+        if j == i:
+            return k
+
+with open('text_do.txt','r', encoding='utf8') as fdo, open('text_posle.txt', 'w') as fpo:
     file_do = str(fdo.readlines())
     file_do = file_do.replace('[', '')
     file_do = file_do.replace(']', '')
     file_do = file_do.replace("'", '')
-    print(file_do)
+    file_format = list(file_do.split())
+    ff = slovar(file_format)
+    for i in file_format:
+        key = get_key(i, ff)
+        if ff[key] == '\\n,':
+            fpo.write('\n')
+        else:
+            fpo.write(f'{key}' + ' ')
      
+with open('text_posle.txt', 'r') as tp, open('text_po.txt', 'w', encoding='utf8') as tpo:
+    file_do = str(tp.readlines())
+    file_do = file_do.replace('[', '')
+    file_do = file_do.replace(']', '')
+    file_do = file_do.replace("'", '')
+    file_format = list(file_do.split())
+    print(file_format)
+    for i in file_format:
+        if i == '\\n,':
+            tpo.write('\n')
+        else:
+            key = int(i)
+            tpo.write(f'{ff[key]} ')
+
 #3 -  ROT13 - это простой шифр подстановки букв, который заменяет букву буквой, которая идет через 13 букв после нее в алфавите. ROT13 является примером шифра Цезаря.
 #Создайте функцию, которая принимает строку и возвращает строку, зашифрованную с помощью Rot13 . 
 # Если в строку включены числа или специальные символы, они должны быть возвращены как есть. 

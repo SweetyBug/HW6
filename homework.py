@@ -68,14 +68,14 @@ znach(array)'''
         if i not in sl.values():
             sl[g] = i
             g += 1
-    return sl
+    return sl'''
         
 def get_key(i, sl):
     for k, j in sl.items():
         if j == i:
             return k
 
-def create_array(text):
+'''def create_array(text):
     stroka = str(text.readlines()).replace('[', '').replace(']', '').replace("'", '')
     array = list(stroka.split())
     return array
@@ -117,6 +117,47 @@ elif user.lower() == 'восстановить':
 slovar = {
     'а': 'м', 'б': 'н', 'в': 'о', 'г': 'п', 'д': 'р', 'е': 'с', 'ё': 'т', 'ж': 'у', 'з': 'ф', 'и': 'х',
     'й': 'ц', 'к': 'ч', 'л': 'ш', 'м': 'щ', 'н': 'ь', 'о': 'ы', 'п': 'ъ', 'р': 'э', 'с': 'ю', 'т': 'я',
-    'у': 'а', 'ф': 'б', 'х': 'в', 'ц': 'г', 'ч': 'д', 'ш': '', 'щ': '', 'ъ': '', 'ы': '', 'ь': '',
-    'э': '', 'ю': '', 'я': ''
+    'у': 'а', 'ф': 'б', 'х': 'в', 'ц': 'г', 'ч': 'д', 'ш': 'е', 'щ': 'ё', 'ъ': 'ж', 'ы': 'з', 'ь': 'и',
+    'э': 'й', 'ю': 'к', 'я': 'л'
 }
+
+def user_code():
+    us = input('Введите текст: ')
+    return us.lower()
+
+user = user_code()
+
+def coder(us, sl):
+    us_1 = ''
+    for i in us:
+        if i in sl:
+            us_1 += sl[i]
+        else:
+            us_1 += i
+    return us_1
+
+def uncoder(us, sl, gk):
+    us_1 = ''
+    for i in us:
+        if i in sl:
+            key = get_key(i, sl)
+            us_1 += key
+        else:
+            us_1 += i
+    print(us_1)
+
+def ask(us, sl, gk, cd, uncd):
+    otvet = input('Вы хотите зашифровать код или расшифровать?: ')
+    if otvet.lower() == 'зашифровать':
+        us_1 = cd(us, sl)
+        print(us_1)
+    elif otvet.lower() == 'расшифровать':
+        uncd(us, sl, gk)
+    else:
+        print('Не понимаю вас. дайте более точный ответ')
+        exit
+    otvet = input('Желаете ли вы расшифровать пердыдущее значение?(Да/нет):')
+    if otvet.lower() == 'да':
+        uncd(us_1, sl, gk)
+
+ask(user, slovar, get_key, coder, uncoder)
